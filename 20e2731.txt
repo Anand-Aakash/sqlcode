@@ -1,0 +1,221 @@
+
+SQL*Plus: Release 11.2.0.2.0 Production on Mon Dec 26 10:08:18 2022
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+SQL> connect /as sysdba
+Connected.
+SQL> create table student
+  2  (studid varchar2(10)primary key,studname varchar(15),section char(7),age number(5));
+
+Table created.
+
+SQL> desc student;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STUDID                                    NOT NULL VARCHAR2(10)
+ STUDNAME                                           VARCHAR2(15)
+ SECTION                                            CHAR(7)
+ AGE                                                NUMBER(5)
+
+SQL> insert into student values(1,'A','B',10);
+
+1 row created.
+
+SQL> insert into student values(2,'C','D',15);
+
+1 row created.
+
+SQL> insert into student values(3,'E','F',20);
+
+1 row created.
+
+SQL> insert into student values(4,'G','H',17);
+
+1 row created.
+
+SQL> insert into student values(5,'I','J',18);
+
+1 row created.
+
+SQL> insert into student values(6,'K','L',19);
+
+1 row created.
+
+SQL> SELECT * FROM STUDENT;
+
+STUDID     STUDNAME        SECTION        AGE
+---------- --------------- ------- ----------
+1          A               B               10
+2          C               D               15
+3          E               F               20
+4          G               H               17
+5          I               J               18
+6          K               L               19
+
+6 rows selected.
+
+SQL> create table dept
+  2  (deptname varchar2(10));
+
+Table created.
+
+SQL> alter table dept add(constraint fkd foreign key(studid) references studid(studid));
+alter table dept add(constraint fkd foreign key(studid) references studid(studid))
+                                                *
+ERROR at line 1:
+ORA-00904: "STUDID": invalid identifier
+
+
+SQL> alter table dept add(studid varchar2(10));
+
+Table altered.
+
+SQL> alter table dept add(constraint fkd foreign key(studid) references studid(studid));
+alter table dept add(constraint fkd foreign key(studid) references studid(studid))
+                                                                   *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> alter table dept add(constraint fkd foreign key(studid) references stud(studid));
+alter table dept add(constraint fkd foreign key(studid) references stud(studid))
+                                                                   *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> alter table dept add(constraint fkd foreign key(studid) references student(studid));
+
+Table altered.
+
+SQL> desc dept;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPTNAME                                           VARCHAR2(10)
+ STUDID                                             VARCHAR2(10)
+
+SQL> insert into dept values(1,'CS'),(2,'MATHS');
+insert into dept values(1,'CS'),(2,'MATHS')
+                               *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL> insert into dept values(1,'CS');
+insert into dept values(1,'CS')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (SYS.FKD) violated - parent key not found
+
+
+SQL> insert into dept values('CS',1);
+
+1 row created.
+
+SQL> insert into dept values('MATHS',2);
+
+1 row created.
+
+SQL> insert into dept values('MATHS',3);
+
+1 row created.
+
+SQL> insert into dept values('CIVIL',4);
+
+1 row created.
+
+SQL> insert into dept values('CIVIL',5);
+
+1 row created.
+
+SQL> insert into dept values('CS\',6);
+
+1 row created.
+
+SQL> DELETE FROM DEPT WHERE DEPTNAME='CS\';
+
+1 row deleted.
+
+SQL> insert into dept values('CS',6);
+
+1 row created.
+
+SQL> SELECT *  FROM DDEPT;
+SELECT *  FROM DDEPT
+               *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> SELECT *  FROM DEPT;
+
+DEPTNAME   STUDID
+---------- ----------
+CS         1
+MATHS      2
+MATHS      3
+CIVIL      4
+CIVIL      5
+CS         6
+
+6 rows selected.
+
+SQL> CREATE TABLE contact
+  2  (studid varchar2(10),emailid varchar2(18),mobileno number(10));
+
+Table created.
+
+SQL> insert into contact values(1,'anandaakash1214@gmail.com',9788739976):
+  2  insert into contact values(1,'anandaakash1214@gmail.com',9788739976);
+SP2-0552: Bind variable "INSERT" not declared.
+SQL> insert into contact values(1,'anandaakash1214@gmail.com',9788739976);
+insert into contact values(1,'anandaakash1214@gmail.com',9788739976)
+                             *
+ERROR at line 1:
+ORA-12899: value too large for column "SYS"."CONTACT"."EMAILID" (actual: 25,
+maximum: 18)
+
+
+SQL> alter table contact modify(emailid varchar2(25));
+
+Table altered.
+
+SQL> insert into contact values(1,'anandaakash1214@gmail.com',9788739976);
+
+1 row created.
+
+SQL> insert into contact values(2,'babuelango2002@gmail.com',9994701641);
+
+1 row created.
+
+SQL> insert into contact values(3,'viralmemes@gmail.com',9342737383);
+
+1 row created.
+
+SQL> insert into contact values(4,'sarath121@gmail.com',8072378456);
+
+1 row created.
+
+SQL> insert into contact values(5,'thalaak07@gmail.com',8072445687);
+
+1 row created.
+
+SQL> insert into contact values(6,'thalapathy10@gmail.com',7904414768);
+
+1 row created.
+
+SQL> select*from contact;
+
+STUDID     EMAILID                     MOBILENO
+---------- ------------------------- ----------
+1          anandaakash1214@gmail.com 9788739976
+2          babuelango2002@gmail.com  9994701641
+3          viralmemes@gmail.com      9342737383
+4          sarath121@gmail.com       8072378456
+5          thalaak07@gmail.com       8072445687
+6          thalapathy10@gmail.com    7904414768
+
+6 rows selected.
+
+SQL>
